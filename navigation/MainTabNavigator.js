@@ -1,14 +1,48 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import {
+  createDrawerNavigator,
   createStackNavigator,
   createBottomTabNavigator,
 } from 'react-navigation';
+
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import ITSScreen from '../screens/ITSScreen';
+import NFRScreen from '../screens/NFRScreen';
+//import CoPTNewScreen from '../screens/CoPTNewScreen';
+import FetchExample from '../screens/FetchExample';
+import FetchExample2 from '../screens/FetchExample2';
+import EntryScreen from '../screens/EntryScreen';
+import AxiosExample from '../screens/AxiosExample';
+import Location_ViewScreen from '../screens/Location_ViewScreen';
+import Location_EditScreen from '../screens/Location_EditScreen';
+import Location_AddScreen from '../screens/Location_AddScreen';
+import Location_ListScreen from '../screens/Location_ListScreen';
+import SignInScreen from '../screens/SignInScreen';
+
+
+const SignInStack = createStackNavigator({
+  SignIn: SignInScreen,
+});
+
+SignInStack.navigationOptions = {
+  tabBarLabel: 'Sign In',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -27,6 +61,192 @@ HomeStack.navigationOptions = {
     />
   ),
 };
+
+const ListStack = createStackNavigator({
+  List: Location_ListScreen,
+});
+
+ListStack.navigationOptions = {
+  tabBarLabel: 'List',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
+const ViewStack = createStackNavigator({
+  View: Location_ViewScreen,
+});
+
+ViewStack.navigationOptions = {
+  tabBarLabel: 'View',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
+const EditStack = createStackNavigator({
+  Edit: Location_EditScreen,
+});
+
+EditStack.navigationOptions = {
+  tabBarLabel: 'Edit',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
+const AddStack = createStackNavigator({
+  Add: Location_AddScreen,
+});
+
+AddStack.navigationOptions = {
+  tabBarLabel: 'Add',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
+
+const ITSStack = createStackNavigator({
+  ITS: ITSScreen,
+});
+
+ITSStack.navigationOptions = {
+  tabBarLabel: 'ITS',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
+const NFRStack = createStackNavigator({
+  NFR: NFRScreen,
+});
+
+NFRStack.navigationOptions = {
+  tabBarLabel: 'NFR',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
+/*
+const COPTNewStack = createStackNavigator({
+  COPTNew: CoPTNewScreen,
+});
+
+COPTNewStack.navigationOptions = {
+  tabBarLabel: 'COPTNew',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+*/
+
+const FetchStack = createStackNavigator({
+  Fetch: FetchExample,
+});
+
+FetchStack.navigationOptions = {
+  tabBarLabel: 'Fetch',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
+const FetchStack2 = createStackNavigator({
+  Fetch2: FetchExample2,
+});
+
+FetchStack2.navigationOptions = {
+  tabBarLabel: 'Fetch2',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
+
+const EntryStack = createStackNavigator({
+  Entry: EntryScreen,
+});
+
+EntryStack.navigationOptions = {
+  tabBarLabel: 'Entry',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
+
 
 const LinksStack = createStackNavigator({
   Links: LinksScreen,
@@ -56,8 +276,52 @@ SettingsStack.navigationOptions = {
   ),
 };
 
-export default createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
+const AxiosStack = createStackNavigator({
+  Axios: AxiosExample,
 });
+
+AxiosStack.navigationOptions = {
+  tabBarLabel: 'Axios',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+    />
+  ),
+};
+
+
+
+/*const DrawerNavigatorExample = createDrawerNavigator({
+  //Drawer Optons and indexing
+  HomeScreen: {
+    //Title
+    Home: HomeScreen,
+    navigationOptions: {
+      drawerLabel: 'Demo Screen 1',
+    },
+  },
+});
+*/
+
+export default createBottomTabNavigator({
+  ListStack,
+  AddStack,
+  ViewStack,
+  EditStack,
+  HomeStack,
+  //EntryStack, 
+  //FetchStack,
+  //FetchStack2,
+  //AxiosStack,
+  //ITSStack,
+  //NFRStack,
+  //COPTNewStack,
+  //LinksStack,
+  //SettingsStack,
+});
+
+/*createDrawerNavigator({
+  DrawerNavigatorExample,
+});*/
+
