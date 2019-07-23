@@ -11,10 +11,10 @@ export default class Location_ViewScreen extends React.Component {
     super(props, ctx)
 
     this.state = {
-      place: null,
-      latitude: null,
-      longitude: null,
-      group: null,
+      TextInputName: '',
+      TextInputGrouptype: '',
+      TextInputLatitude: '',
+      TextInputLongitude: '',
     }
 
   }
@@ -26,40 +26,36 @@ export default class Location_ViewScreen extends React.Component {
   });
 */
   
-  static navigationOptions = ({ navigation, screenProps }) => ({
-    title: 'PSU-Community',
-    headerLeft: 
-      <Icon
-          name='arrow-back'
-          
-          color='#FFFFFF'
-          onPress = {()=> {
-            navigation.navigate('List')
-          }
-        }
-      />
-   ,
+  static navigationOptions = ({ navigation }) => ({
+    title: 'รายละเอียด',
     headerStyle: {
       backgroundColor: '#3366CC',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
       fontWeight: 'bold',
+      textAlign: 'center',
+      flexGrow:1,
+      alignSelf:'center',
+      marginRight: 70,
     },
   });
-  
+
   componentDidMount(){
+ 
+    this.setState({ 
+      TextInputName: this.props.navigation.getParam('param_name'),
+      TextInputGrouptype: this.props.navigation.getParam('param_grouptype'),
+      TextInputLatitude: this.props.navigation.getParam('param_latitude'),
+      TextInputLongitude: this.props.navigation.getParam('param_longitude'),
+    })
+
+   }
   
-    const p_id = this.props.navigation.getParam('param_id');
-    const p_name = this.props.navigation.getParam('param_name');
-    const p_grouptype = this.props.navigation.getParam('param_grouptype');
-    const p_latitude = this.props.navigation.getParam('param_latitude');
-    const p_longitude = this.props.navigation.getParam('param_longitude');
-
-
+  ShowLocation(){
     //fetch("https://jsonplaceholder.typicode.com/users",{
-    //fetch("http://192.168.2.40/ServiceAPI/public/api/location",{
-    fetch("http://172.22.108.157/ServiceAPI/public/api/location/"+p_id ,{
+    fetch("http://192.168.2.40/ServiceAPI/public/api/location",{
+    //fetch("http://172.22.108.157/ServiceAPI/public/api/location/"+p_id ,{
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
@@ -77,6 +73,39 @@ export default class Location_ViewScreen extends React.Component {
     .catch(error=>console.log(error)) //to catch the errors if any
   }
 
+  DeleteLocation = () =>{
+
+    const p_id = this.props.navigation.getParam('param_id');
+    const p_name = this.props.navigation.getParam('param_name');
+    const p_grouptype = this.props.navigation.getParam('param_grouptype');
+    const p_latitude = this.props.navigation.getParam('param_latitude');
+    const p_longitude = this.props.navigation.getParam('param_longitude');
+
+
+    //fetch("http://192.168.2.40/ServiceAPI/public/api/location/"+p_id ,{    
+    fetch("http://172.22.108.15/ServiceAPI/public/api/location/"+p_id ,{
+          method: 'delete',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+  
+      // Showing response message coming from server after inserting records.
+      Alert.alert(responseJson);
+  
+    }).catch((error) => {
+       console.error(error);
+    });
+
+    this.props.navigation.navigate('List');
+
+}
+
+
+
   render() {
     //const dataT = this.state.dataSource;
     const {navigate} = this.props.navigation;
@@ -86,86 +115,53 @@ export default class Location_ViewScreen extends React.Component {
 
     return (
       
-      <View style={styles.container}>     
+      <View style={styles.container}>
        <ScrollView>
-        <Text style={styles.text}>สถานที่</Text>
-        <Form ref={this._onFormRef} onChange={this.onChange} onSubmit={this.onSubmit} validate={this.validate} >
 
-          <Form.Layout style={styles.row}>
-              <Form.Field name="place" label="ชื่อสถานที่ :" style={styles.field}>
-                <Form.TextField value={this.props.navigation.getParam('param_name')}/>
-              </Form.Field>
-          </Form.Layout>
+          <Text style={styles.text}>ชื่อสถานที่ :</Text>
+          <TextInput style={styles.textArea}>
+            {this.props.navigation.getParam('param_name')}
+          </TextInput>
 
-          <Form.Layout style={styles.row}>
-            <Form.Field name="group" label="กลุ่ม :" style={styles.field}>
-             <Form.TextField value={this.props.navigation.getParam('param_grouptype')}/>
-            </Form.Field>
-          </Form.Layout>
-          
-          <Form.Layout style={styles.row}>
-              <Form.Field name="latitude" label="ละติจูด :" style={styles.field}>
-               <Form.TextField value={this.props.navigation.getParam('param_latitude')}/>
-              </Form.Field>
-            </Form.Layout>
-          
-          <Form.Layout style={styles.row}>
-            <Form.Field name="longitude" label="ลองจิจูด :" style={styles.field}>
-            <Form.TextField value={this.props.navigation.getParam('param_longitude')}/>
-            </Form.Field>
-          </Form.Layout>
+          <Text style={styles.text}>กลุ่ม :</Text>
+          <TextInput style={styles.textArea}>
+            {this.props.navigation.getParam('param_grouptype')}
+          </TextInput>
 
-        </Form>
-        
+          <Text style={styles.text}>ละติจูด :</Text>
+          <TextInput style={styles.textArea}>
+            {this.props.navigation.getParam('param_latitude')}
+          </TextInput>
 
+          <Text style={styles.text}>ลองจิจูด :</Text>
+          <TextInput style={styles.textArea}>
+            {this.props.navigation.getParam('param_longitude')}
+          </TextInput>
+              
         <View style={styles.button}>
           <Button
-            onPress={ () => 
-              navigate('Edit') 
-            }
+            onPress={ () => {
+              navigate('Edit',{
+                param_id:this.props.navigation.getParam('param_id'),
+                param_name:this.props.navigation.getParam('param_name'),
+                param_grouptype:this.props.navigation.getParam('param_grouptype'),
+                param_latitude:this.props.navigation.getParam('param_latitude'),
+                param_longitude:this.props.navigation.getParam('param_longitude')              
+              })
+            }}
             title="แก้ไข"
           />
         </View>
 
         <View style={styles.button}>
           <Button
-            onPress={ () => 
-              navigate('Edit') 
-            }
+            onPress={this.DeleteLocation}
             title="ลบ"
           />
         </View>
        </ScrollView>
       </View>
     )
-  }
-
-  _onFormRef = e => {
-    this.form = e
-  }
-
-  onChange = (values) => {
-    this.setState(values)
-  }
-
-  onSubmit = (values) => {
-    Alert.alert('Submitted: ' + JSON.stringify(values))
-    //onPress={() => navigate('EntryStack')}
-  }
-
-  validate = (values) => {
-    const ret = Object.keys(this.state).reduce((m, v) => {
-      if (!values[v] || !values[v].length) {
-        m[v] = Form.VALIDATION_RESULT.MISSING
-      }
-      return m
-    }, {})
-
-    /*if (!ret.age && isNaN(values.age)) {
-      ret.age = Form.VALIDATION_RESULT.INCORRECT
-    }*/
-
-    return ret
   }
 }
 
@@ -174,19 +170,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#E6E6FA',
     paddingTop: 30,
+    paddingBottom: 30,
     paddingHorizontal: 20,
   },
-  row: {
-    marginBottom: 20,
-  },
-  columns: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  field: {
-    marginRight: 10,
+  
+  text: {
+    marginBottom: 5,
     fontSize: 20,
+  },
+  textArea: {
+    fontSize:15,
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 7,
+    backgroundColor : '#FFFFFF',
+    borderColor: '#E6E6FA',
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    marginBottom: 20,
   },
   button: {
     height: 30,
@@ -197,20 +198,21 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 10,
     alignSelf: 'stretch',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   error: {
     marginTop: 10,
   },
-  text: {
+  title: {
     fontSize: 30,
     textAlign: 'center',
     marginBottom: 15,
-  },
-  param: {
-    fontSize: 20,
+
   },
   errorMsg: {
     color: 'red'
+  },
+  icon: {
+    paddingLeft: 10,
   }
 })

@@ -64,17 +64,6 @@ SettingsStack.navigationOptions = {
 };
 
 
-/*const DrawerNavigatorExample = createDrawerNavigator({
-  //Drawer Optons and indexing
-  HomeScreen: {
-    //Title
-    Home: HomeScreen,
-    navigationOptions: {
-      drawerLabel: 'Demo Screen 1',
-    },
-  },
-});
-*/
 
 export default createBottomTabNavigator({
   HomeStack,
@@ -82,7 +71,4 @@ export default createBottomTabNavigator({
   SettingsStack,
 });
 
-/*createDrawerNavigator({
-  DrawerNavigatorExample,
-});*/
 

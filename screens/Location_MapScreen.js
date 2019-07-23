@@ -1,39 +1,19 @@
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TouchableHighlight, Dimensions, Alert, TouchableOpacity} from 'react-native';
+import React, { Component } from 'react';
+import { Platform, Text, View, StyleSheet, Dimensions } from 'react-native';
 
 import MapView, { Marker, Callout, ProviderPropType } from 'react-native-maps';
-
-import { Button } from 'react-native-elements';
-
-import DialogInput from 'react-native-dialog-input';
-
-import ActionButton from 'react-native-action-button';
-
-import { Icon } from 'react-native-elements'
 
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 
-
-
-export default class HomeScreen extends React.Component {
-
+export default class Location_MapSceen extends Component {
   state = {
     location: null,
-    errorMessage: null,
+    errorMessage: null,  
+    latitude: null,
+    longitude: null,
   };
-
-  static navigationOptions = ({ navigation }) => ({
-    title: 'PSU-Community',
-    headerStyle: {
-      backgroundColor: '#3366CC',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  });
 
   componentWillMount() {
     if (Platform.OS === 'android' && !Constants.isDevice) {
@@ -54,23 +34,39 @@ export default class HomeScreen extends React.Component {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    this.setState({ location });
+    let latitude = location.coords.latitude;
+    let longitude = location.coords.longitude;
+    alert(location.coords.latitude);
+    alert(location.coords.longitude);
+    this.setState({ location });    
+    this.setState({ latitude }); 
+    this.setState({ longitude }); 
+         
   };
 
-
-
   render() {
+    let text = 'Waiting..';  
+    let myLo_latitude = this.state.latitude;
+    let myLo_longitude = this.state.longitude;
+
     const { width, height } = Dimensions.get('window');
     const ASPECT_RATIO = width / height;
-    const LTT = this.props.navigation.getParam('param_latitude');
-    const LGT = this.props.navigation.getParam('param_longitude');
 
-    
+    if (this.state.errorMessage) {
+      text = this.state.errorMessage;
+    } else if (this.state.location) {
+      text = JSON.stringify(this.state.location);
+      //alert('latitude: ' + this.state.location.coords.latitude);
+      //alert('longitude: ' + this.state.location.coords.longitude);
+
+      //myLo_latitude = Number(this.state.location.coords.latitude);
+      //myLo_longitude =  Number(this.state.location.coords.longitude);
+
+      //text = "Longitude: " + myLo_longitude + "\nLatitude: " + myLo_latitude;
+    }
+
     return (
-      
       <View style={styles.MainContainer}>
-
-        
  
         <MapView
           style={styles.mapStyle}
@@ -80,27 +76,29 @@ export default class HomeScreen extends React.Component {
           initialRegion={{
             //latitude: 7.008945,
             //longitude: 100.497930,
-            latitude: LTT,
-            longitude: LGT,
+            latitude: 7.00891383730039, 
+            longitude: 100.4983782894092,
+            //latitude:  myLo_latitude , 
+            //longitude:  myLo_longitude ,
             latitudeDelta: 0.001,
             longitudeDelta: 0.001 * ASPECT_RATIO,
           }}>
- 
+
           <Marker
             //coordinate={{ latitude: 7.008945, longitude: 100.497930 }}
-            coordinate={{ latitude: LTT, longitude: LGT }}
-            //title={"ศูนย์คอมพิวเตอร์"}
-            title={this.props.navigation.getParam('param_name')}
+            coordinate={{ latitude: 7.00891383730039, longitude: 100.4983782894092 }}
+            //coordinate={{ latitude: myLo_latitude, longitude: myLo_longitude }}
+            title={"ศูนย์คอมพิวเตอร์"}
+            //title={myLo_latitude.toString()}
             description={"มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"}
           />
- 
+           
         </MapView>
  
       </View>
     );
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {

@@ -18,12 +18,31 @@ import FetchExample from '../screens/FetchExample';
 import FetchExample2 from '../screens/FetchExample2';
 import EntryScreen from '../screens/EntryScreen';
 import AxiosExample from '../screens/AxiosExample';
+import Location_MapScreen from '../screens/Location_MapScreen';
 import Location_ViewScreen from '../screens/Location_ViewScreen';
 import Location_EditScreen from '../screens/Location_EditScreen';
 import Location_AddScreen from '../screens/Location_AddScreen';
 import Location_ListScreen from '../screens/Location_ListScreen';
 import SignInScreen from '../screens/SignInScreen';
+import SplashScreen from '../screens/SplashScreen';
 
+const SplashStack = createStackNavigator({
+  Splash: SplashScreen,
+});
+
+SplashStack.navigationOptions = {
+  tabBarLabel: 'Splash',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
 
 const SignInStack = createStackNavigator({
   SignIn: SignInScreen,
@@ -44,38 +63,34 @@ SignInStack.navigationOptions = {
 };
 
 
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
+const MapStack = createStackNavigator({
+  Map: Location_MapScreen,
 });
 
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+MapStack.navigationOptions = {
+  tabBarLabel: 'Map',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      name={Platform.OS === 'ios' ? 'ios-map' : 'md-map'}
     />
   ),
 };
 
 const ListStack = createStackNavigator({
   List: Location_ListScreen,
+  Home: HomeScreen,
+  View: Location_ViewScreen,
+  Edit: Location_EditScreen,
+  Add: Location_AddScreen,
 });
 
 ListStack.navigationOptions = {
   tabBarLabel: 'List',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+    focused={focused}
+    name={Platform.OS === 'ios' ? 'ios-list' : 'md-list'}
     />
   ),
 };
@@ -246,6 +261,39 @@ EntryStack.navigationOptions = {
   ),
 };
 
+const AxiosStack = createStackNavigator({
+  Axios: AxiosExample,
+});
+
+AxiosStack.navigationOptions = {
+  tabBarLabel: 'Axios',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+    />
+  ),
+};
+
+
+const HomeStack = createStackNavigator({
+  Home: HomeScreen,
+});
+
+HomeStack.navigationOptions = {
+  tabBarLabel: 'Home',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
 
 
 const LinksStack = createStackNavigator({
@@ -276,40 +324,18 @@ SettingsStack.navigationOptions = {
   ),
 };
 
-const AxiosStack = createStackNavigator({
-  Axios: AxiosExample,
-});
-
-AxiosStack.navigationOptions = {
-  tabBarLabel: 'Axios',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-    />
-  ),
-};
 
 
 
-/*const DrawerNavigatorExample = createDrawerNavigator({
-  //Drawer Optons and indexing
-  HomeScreen: {
-    //Title
-    Home: HomeScreen,
-    navigationOptions: {
-      drawerLabel: 'Demo Screen 1',
-    },
-  },
-});
-*/
 
 export default createBottomTabNavigator({
   ListStack,
-  AddStack,
-  ViewStack,
-  EditStack,
-  HomeStack,
+  MapStack,
+  //AddStack,
+  //ViewStack,
+  //EditStack,
+  //HomeStack,
+
   //EntryStack, 
   //FetchStack,
   //FetchStack2,
@@ -321,7 +347,4 @@ export default createBottomTabNavigator({
   //SettingsStack,
 });
 
-/*createDrawerNavigator({
-  DrawerNavigatorExample,
-});*/
 

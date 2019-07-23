@@ -6,78 +6,125 @@ import { Button,
          Text, 
          View,
          ScrollView,
+         TextInput,
          TouchableOpacity, } from 'react-native'
 import Form from 'react-native-advanced-forms'
 import { MaterialDialog } from 'react-native-material-dialog';
 import { ConfirmDialog } from 'react-native-simple-dialogs';
 //import {createStackNavigator, createAppContainer} from 'react-navigation';
-import EntryScreen from './EntryScreen';
 
 export default class Location_AddScreen extends React.Component {
-  constructor (props, ctx) {
-    super(props, ctx)
-
-    this.state = {
-      place: null,
-      latitude: null,
-      longitude: null,
-      group: null,
-    }
-  }
-  static navigationOptions = {
-    title: 'PSU-Community',
+  static navigationOptions = ({ navigation }) => ({
+    title: 'เพิ่มสถานที่',
     headerStyle: {
       backgroundColor: '#3366CC',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
       fontWeight: 'bold',
+      textAlign: 'center',
+      flexGrow:1,
+      alignSelf:'center',
+      marginRight: 70,
     },
-  };
+  });
+  
+  constructor (props, ctx) {
+    super(props, ctx)
+
+    this.state = {
+      TextInputName: '',
+      TextInputGrouptype: '',
+      TextInputLatitude: '',
+      TextInputLongitude: '',
+    }
+  }
+
+
+  InsertDataToServer = () =>{
+ 
+    const { TextInputName }  = this.state ;
+    const { TextInputGrouptype }  = this.state ;
+    const { TextInputLatitude }  = this.state ;
+    const { TextInputLongitude }  = this.state ;
+    
+    
+   fetch("http://192.168.2.40/ServiceAPI/public/api/location",{ 
+   //fetch('http://172.22.108.157/ServiceAPI/public/api/location', {
+     method: 'post',
+     headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json',
+     },
+     body: JSON.stringify({
+    
+       name: TextInputName,
+    
+       grouptype: TextInputGrouptype,
+    
+       latitude: TextInputLatitude,
+
+       longitude: TextInputLongitude
+    
+     })
+    
+   }).then((response) => response.json())
+         .then((responseJson) => {
+    
+   // Showing response message coming from server after inserting records.
+           Alert.alert(responseJson);
+    
+         }).catch((error) => {
+           console.error(error);
+         });
+    
+    
+  }
 
   render() {
     const {navigate} = this.props.navigation;
-    const {
-      place, group, latitude, longitude,
-    } = this.state
 
     return (
 
       <View style={styles.container}>
        <ScrollView>
-        <Text style={styles.text}>เพิ่มสถานที่</Text>
-        <Form ref={this._onFormRef} onChange={this.onChange} onSubmit={this.onSubmit} validate={this.validate}>
 
-          <Form.Layout style={styles.row}>
-              <Form.Field name="place" label="ชื่อสถานที่ :" style={styles.field}>
-                <Form.TextField value={place} placeholder="กรุณากรอกสถานที่"/>
-              </Form.Field>
-          </Form.Layout>
+        <Text style={styles.text}>ชื่อสถานที่ :</Text>
+          <TextInput 
+            style={styles.textArea} 
+            value={this.state.TextInputName} 
+            onChangeText={TextInputName => this.setState({TextInputName})} 
+            placeholder="กรุณาชื่อสถานที่"
+          />
 
-          <Form.Layout style={styles.row}>
-            <Form.Field name="group" label="กลุ่ม :" style={styles.field}>
-              <Form.TextField value={group} placeholder="กรุณากรอกกลุ่ม"/>
-            </Form.Field>
-          </Form.Layout>
-          
-          <Form.Layout style={styles.row}>
-              <Form.Field name="latitude" label="ละติจูด :" style={styles.field}>
-                <Form.TextField value={latitude} keyboardType='numeric' placeholder="กรุณากรอกละติจูด"/>
-              </Form.Field>
-            </Form.Layout>
-          
-          <Form.Layout style={styles.row}>
-            <Form.Field name="longitude" label="ลองจิจูด :" style={styles.field}>
-              <Form.TextField value={longitude} keyboardType='numeric' placeholder="กรุณากรอกลองจิจูด"/>
-            </Form.Field>
-          </Form.Layout>
+        <Text style={styles.text}>กลุ่ม :</Text>
+          <TextInput 
+            style={styles.textArea}
+            value={this.state.TextInputGrouptype} 
+            onChangeText={TextInputGrouptype => this.setState({TextInputGrouptype})} 
+            placeholder="กรุณากรอกกลุ่ม"
+          />
+      
+        <Text style={styles.text}>ละติจูด :</Text>
+            <TextInput 
+              style={styles.textArea} 
+              value={this.state.TextInputLatitude} 
+              onChangeText={TextInputLatitude => this.setState({TextInputLatitude})}  
+              placeholder="กรุณากรอกละติจูด"
+            />
 
-        </Form>
-        
+          <Text style={styles.text}>ลองจิจูด :</Text>
+          <TextInput 
+            style={styles.textArea} 
+            value={this.state.TextInputLongitude} 
+            onChangeText={TextInputLongitude => this.setState({TextInputLongitude})}  
+            placeholder="กรุณากรอกลองจิจูด"
+          />
+
 
         <View style={styles.button}>
           <Button
-            onPress={() =>this.form.validateAndSubmit()}
+            onPress={this.InsertDataToServer}
             title="บันทึก"
 
           />
@@ -97,27 +144,6 @@ export default class Location_AddScreen extends React.Component {
     )
   }
 
-  _onFormRef = e => {
-    this.form = e
-  }
-
-  onChange = (values) => {
-    this.setState(values)
-  }
-
-  onSubmit(values){
-
-  }
-
-  validate = (values) => {
-    const ret = Object.keys(this.state).reduce((m, v) => {
-      if (!values[v] || !values[v].length) {
-        m[v] = Form.VALIDATION_RESULT.MISSING
-      }
-      return m
-    }, {})
-    return ret
-  }
 }
 
 const styles = StyleSheet.create({
@@ -125,6 +151,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#E6E6FA',
     paddingTop: 30,
+    paddingBottom: 30,
     paddingHorizontal: 20,
   },
   row: {
@@ -154,13 +181,27 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   text: {
+    marginBottom: 5,
+    fontSize: 20,
+  },
+  title: {
     fontSize: 30,
     textAlign: 'center',
     marginBottom: 15,
-
   },
   errorMsg: {
     color: 'red'
+  },
+  textArea: {
+    fontSize:15,
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 7,
+    backgroundColor : '#FFFFFF',
+    borderColor: '#E6E6FA',
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    marginBottom: 20,
   }
 })
 

@@ -3,6 +3,8 @@ import { createDrawerNavigator, createAppContainer, createSwitchNavigator, creat
 
 import SignInScreen from '../screens/SignInScreen';
 
+import SplashScreen from '../screens/SplashScreen';
+
 import MainTabNavigator from './MainTabNavigator';
 
 import HomeScreen from '../screens/HomeScreen';
@@ -23,12 +25,13 @@ export default createAppContainer(createSwitchNavigator({
 export default createAppContainer(createDrawerNavigator({
   // You could add another route here for authentication.
   // Read more at https://reactnavigation.org/docs/en/auth-flow.html 
+  //SignIn: SignInScreen,
   Main: MainTabNavigator,
-  SignIn: SignInScreen,
-  Drawer: MainDrawerNavigator,
+  //Drawer: MainDrawerNavigator,
 }));
 
-
+/*
 navigator.navigationOptions = {
   drawerLabel: 'Demo Screen 1',
 };
+*/

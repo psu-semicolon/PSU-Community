@@ -5,28 +5,33 @@ View,
 ActivityIndicator,
 FlatList,
 Text,
+TextInput,
 TouchableOpacity
 } from "react-native";
 
 import Location_ViewScreen from './Location_ViewScreen';
 
+import HomeScreen from './HomeScreen';
+
 import ActionButton from 'react-native-action-button';
 
-import { Icon } from 'react-native-elements'
+import { Icon, Button } from 'react-native-elements'
 
 
 export default class Location_ListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'PSU-Community',
     headerLeft: 
-      <Icon
-          name='menu'      
-          color='#FFFFFF'
-          onPress = {()=> {
-            navigation.openDrawer();
-          }
+    <View style={styles.icon}>
+    <Icon
+        name='menu'      
+        color='#FFFFFF'
+        onPress = {()=> {
+          navigation.openDrawer();
         }
-      />
+      }
+    />
+    </View>
    ,
     headerStyle: {
       backgroundColor: '#3366CC',
@@ -35,14 +40,19 @@ export default class Location_ListScreen extends React.Component {
     headerTintColor: '#fff',
     headerTitleStyle: {
       fontWeight: 'bold',
+      textAlign: 'center',
+      flexGrow:1,
+      alignSelf:'center',
+      marginRight: 70,
     },
   });
 constructor(props) {
  super(props);
  this.state = {
    loading: true,
-   dataSource:[]
+   text: '',
   };
+  this.arrayholder = [] ;
 }
 
 
@@ -50,7 +60,8 @@ constructor(props) {
 componentDidMount(){
 //fetch("https://jsonplaceholder.typicode.com/users",{
 //fetch("http://192.168.2.40/ServiceAPI/public/api/location",{
-fetch("http://172.22.108.157/ServiceAPI/public/api/location",{
+//fetch("http://172.22.108.15/ServiceAPI/public/api/location",{
+  fetch("http://kbwservice.psu.ac.th/api/location",{
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
@@ -61,21 +72,36 @@ fetch("http://172.22.108.157/ServiceAPI/public/api/location",{
 .then((responseJson)=> {
   this.setState({
    loading: false,
-   dataSource: responseJson.location
-  })
+   dataSource: responseJson.location   
+  });
+  this.arrayholder = responseJson.location;
 })
 .catch(error=>console.log(error)) //to catch the errors if any
 }
+
+SearchFilterFunction(text){
+     
+  const newData = this.arrayholder.filter(function(item){
+      const itemData = item.name.toUpperCase()
+      const textData = text.toUpperCase()
+      return itemData.indexOf(textData) > -1
+  })
+  this.setState({
+      dataSource: newData,
+      text: text
+  })
+}
+
+
 FlatListItemSeparator = () => {
 return (
-  <View style={{
-     height: .5,
-     width:"100%",
-     backgroundColor:"rgba(0,0,0,0.5)",
-     
-}}
-/>
-);
+    <View style={{
+      height: .5,
+      width:"100%",
+      backgroundColor:"rgba(0,0,0,0.5)",
+      
+    }}/>
+  );
 }
 
 
@@ -88,7 +114,17 @@ render(){
     </View>
 )}
 return(
- <View style={styles.container}>
+  <View style={styles.container}>
+  <View style={styles.SectionStyle}>
+  <Icon style={styles.searchIcon} name="search" size={20} color='#696969'/>
+  <TextInput 
+      style={styles.TextInputStyleClass}
+      onChangeText={(text) => this.SearchFilterFunction(text)}
+      value={this.state.text}
+      underlineColorAndroid='transparent'
+      placeholder="ค้นหาสถานที่ เช่น 7-eleven,อาหาร"
+   /> 
+ </View>
  <FlatList
     data= {this.state.dataSource}
     ItemSeparatorComponent = {this.FlatListItemSeparator}
@@ -100,14 +136,28 @@ return(
             param_id: data.item.id, 
             param_name: data.item.name,
             param_grouptype: data.item.grouptype,
-            param_latitude: data.item.latitude,
-            param_longitude: data.item.longitude
+            param_latitude: Number(data.item.latitude),
+            param_longitude: Number(data.item.longitude)
           })
         }} 
         style={styles.list}
       >
       <Text style={styles.lightText}>{data.item.name}</Text>
       <Text style={styles.lightText}>{data.item.grouptype}</Text>
+      <View style={styles.button}>
+      <Button
+            onPress={() => {
+              navigate('Home', {
+                param_id: data.item.id, 
+                param_name: data.item.name,
+                param_grouptype: data.item.grouptype,
+                param_latitude: Number(data.item.latitude),
+                param_longitude: Number(data.item.longitude)
+              })
+            }} 
+            title="ไปยังแผนที่"
+      />
+      </View>
       </TouchableOpacity>
     }
     keyExtractor= {item=>item.id.toString()}
@@ -135,5 +185,42 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     margin: 5,
     backgroundColor: "#fff"
-   }
+   },
+   TextInputStyleClass:{
+    textAlign: 'center',
+    borderWidth: 0,
+    borderColor: '#FFF',
+   },
+  button: {
+    backgroundColor: '#48BBEC',
+    borderColor: '#E6E6FA',
+    borderWidth: 1,
+    borderRadius: 7,
+    marginTop: 15,
+    marginBottom: 10,
+    marginRight: 15,
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+  },
+  icon: {
+    marginLeft: 10,
+  },
+  searchIcon: {
+    padding: 10,
+    margin: 5,
+    height: 25,
+    width: 25,
+    resizeMode : 'stretch',
+    alignItems: 'center',
+  },
+  SectionStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    height: 40,
+    borderRadius: 7 ,
+    margin: 10
+  }
 });

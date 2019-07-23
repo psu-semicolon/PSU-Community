@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#E6E6FA',
   },
   header: {
     alignItems: 'center',
@@ -156,8 +156,10 @@ const styles = StyleSheet.create({
     height: 44,
     padding: 10,
     borderWidth: 1,
+    backgroundColor: '#FFF',
     borderColor: 'black',
     marginBottom: 10,
+    borderRadius: 7,
   },  
   button: {
     backgroundColor: 'green',
