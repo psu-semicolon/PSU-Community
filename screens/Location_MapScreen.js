@@ -14,7 +14,7 @@ export default class Location_MapSceen extends Component {
     latitude: null,
     longitude: null,
   };
-
+ 
   componentWillMount() {
     if (Platform.OS === 'android' && !Constants.isDevice) {
       this.setState({
@@ -33,37 +33,21 @@ export default class Location_MapSceen extends Component {
       });
     }
 
-    let location = await Location.getCurrentPositionAsync({});
-    let latitude = location.coords.latitude;
-    let longitude = location.coords.longitude;
-    alert(location.coords.latitude);
-    alert(location.coords.longitude);
-    this.setState({ location });    
-    this.setState({ latitude }); 
-    this.setState({ longitude }); 
-         
+    let location = await Location.getCurrentPositionAsync({});    
+    this.setState({ location }); 
+
+    let j_latitude = JSON.stringify(location.coords.latitude);            
+    this.setState({ latitude: j_latitude });
+
+    let j_longitude = JSON.stringify(location.coords.longitude);
+    this.setState({ longitude: j_longitude });
+ 
   };
 
   render() {
-    let text = 'Waiting..';  
-    let myLo_latitude = this.state.latitude;
-    let myLo_longitude = this.state.longitude;
 
     const { width, height } = Dimensions.get('window');
     const ASPECT_RATIO = width / height;
-
-    if (this.state.errorMessage) {
-      text = this.state.errorMessage;
-    } else if (this.state.location) {
-      text = JSON.stringify(this.state.location);
-      //alert('latitude: ' + this.state.location.coords.latitude);
-      //alert('longitude: ' + this.state.location.coords.longitude);
-
-      //myLo_latitude = Number(this.state.location.coords.latitude);
-      //myLo_longitude =  Number(this.state.location.coords.longitude);
-
-      //text = "Longitude: " + myLo_longitude + "\nLatitude: " + myLo_latitude;
-    }
 
     return (
       <View style={styles.MainContainer}>
@@ -72,27 +56,27 @@ export default class Location_MapSceen extends Component {
           style={styles.mapStyle}
           showsUserLocation={false}
           zoomEnabled={true}
-          zoomControlEnabled={true}
+          zoomControlEnabled={true} 
           initialRegion={{
-            //latitude: 7.008945,
-            //longitude: 100.497930,
-            latitude: 7.00891383730039, 
-            longitude: 100.4983782894092,
-            //latitude:  myLo_latitude , 
-            //longitude:  myLo_longitude ,
-            latitudeDelta: 0.001,
-            longitudeDelta: 0.001 * ASPECT_RATIO,
+            //latitude: 7.00891383730039,   // "ศูนย์คอมพิวเตอร์"
+            //longitude: 100.4983782894092, // "มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"
+            latitude: Number(this.state.latitude), 
+            longitude: Number(this.state.longitude),
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01 * ASPECT_RATIO,
           }}>
-
+          
           <Marker
-            //coordinate={{ latitude: 7.008945, longitude: 100.497930 }}
-            coordinate={{ latitude: 7.00891383730039, longitude: 100.4983782894092 }}
-            //coordinate={{ latitude: myLo_latitude, longitude: myLo_longitude }}
-            title={"ศูนย์คอมพิวเตอร์"}
-            //title={myLo_latitude.toString()}
-            description={"มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"}
+            coordinate={{
+              //latitude: 7.00891383730039,   // "ศูนย์คอมพิวเตอร์"
+              //longitude: 100.4983782894092, // "มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"
+              latitude: Number(this.state.latitude), 
+              longitude: Number(this.state.longitude),
+            }}
+            title={"My location"}
+            description={"ที่อยู่ปัจจุบันของฉัน"}
           />
-           
+                    
         </MapView>
  
       </View>
