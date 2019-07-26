@@ -119,22 +119,22 @@ export default class Location_ViewScreen extends React.Component {
        <ScrollView>
 
           <Text style={styles.text}>ชื่อสถานที่ :</Text>
-          <TextInput style={styles.textArea}>
+          <TextInput editable={false} style={styles.textArea}>
             {this.props.navigation.getParam('param_name')}
           </TextInput>
 
           <Text style={styles.text}>กลุ่ม :</Text>
-          <TextInput style={styles.textArea}>
+          <TextInput editable={false} style={styles.textArea}>
             {this.props.navigation.getParam('param_grouptype')}
           </TextInput>
 
           <Text style={styles.text}>ละติจูด :</Text>
-          <TextInput style={styles.textArea}>
+          <TextInput editable={false} style={styles.textArea}>
             {this.props.navigation.getParam('param_latitude')}
           </TextInput>
 
           <Text style={styles.text}>ลองจิจูด :</Text>
-          <TextInput style={styles.textArea}>
+          <TextInput editable={false} style={styles.textArea}>
             {this.props.navigation.getParam('param_longitude')}
           </TextInput>
               
@@ -155,7 +155,8 @@ export default class Location_ViewScreen extends React.Component {
 
         <View style={styles.button}>
           <Button
-            onPress={this.DeleteLocation}
+            //onPress={this.DeleteLocation}
+            onPress={() => {}}
             title="ลบ"
           />
         </View>

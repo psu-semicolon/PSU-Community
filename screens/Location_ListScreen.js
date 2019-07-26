@@ -13,6 +13,7 @@ import Location_ViewScreen from './Location_ViewScreen';
 
 import HomeScreen from './HomeScreen';
 
+
 import ActionButton from 'react-native-action-button';
 
 import { Icon, Button } from 'react-native-elements'
@@ -59,9 +60,9 @@ constructor(props) {
 
 componentDidMount(){
 //fetch("https://jsonplaceholder.typicode.com/users",{
-//fetch("http://192.168.2.40/ServiceAPI/public/api/location",{
+//fetch("http://192.168.2.42/ServiceAPI/public/api/location",{
 //fetch("http://172.22.108.15/ServiceAPI/public/api/location",{
-  fetch("http://kbwservice.psu.ac.th/api/location",{
+fetch("http://kbwservice.psu.ac.th/api/location",{
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
@@ -147,7 +148,7 @@ return(
       <View style={styles.button}>
       <Button
             onPress={() => {
-              navigate('Home', {
+              navigate('Direction', {
                 param_id: data.item.id, 
                 param_name: data.item.name,
                 param_grouptype: data.item.grouptype,
