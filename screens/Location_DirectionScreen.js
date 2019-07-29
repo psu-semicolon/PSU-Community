@@ -97,6 +97,7 @@ export default class Location_DirectionScreen extends Component {
             }}
             title={"My location"}
             description={"ที่อยู่ปัจจุบันของฉัน"}
+            image={require('../assets/images/placeholder.png')}
           />
           <Marker
             coordinate={{
@@ -115,7 +116,7 @@ export default class Location_DirectionScreen extends Component {
           <MapViewDirections 
             origin={{ 
               latitude: Number(this.state.latitude), 
-              longitude: Number(this.state.longitude)
+              longitude: Number(this.state.longitude),
               //latitude: 7.00891383730039,   // "ศูนย์คอมพิวเตอร์"
               //longitude: 100.4983782894092, // "มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"
               //latitude: 7.00318,   // "7-Eleven 8 คณะแพทย์ ม.อ."
@@ -129,7 +130,7 @@ export default class Location_DirectionScreen extends Component {
               latitude: LTT,   // "7-Eleven 8 คณะแพทย์ ม.อ."
               longitude: LGT, // 
               }}
-              apikey={"Google Api Direction"} 
+              apikey={"AIzaSyAgIPgpUq8oRjr5bv5Mz8LHoE0PKQeUTUI"} 
               strokeWidth={3}
               strokeColor="hotpink"
           />

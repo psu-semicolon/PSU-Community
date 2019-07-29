@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, Text, View, StyleSheet, Dimensions } from 'react-native';
+import { Image, Platform, Text, View, StyleSheet, Dimensions } from 'react-native';
 
 import MapView, { Marker, Callout, ProviderPropType } from 'react-native-maps';
 
@@ -105,9 +105,11 @@ export default class Location_MapSceen extends Component {
             }}
             title={"My location"}
             description={"ที่อยู่ปัจจุบันของฉัน"}
+            image={require('../assets/images/placeholder.png')}
           />
-                    
+      
         </MapView>
+        
  
       </View>
     );
