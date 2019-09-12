@@ -149,7 +149,8 @@ export default class Location_EditScreen extends React.Component {
 
         <View style={styles.button}>
           <Button
-            onPress={() => this.form.validateAndSubmit()}
+            //onPress={() => this.form.validateAndSubmit()}
+            onPress={() => {}}
             title="บันทึก"
           />
         </View>

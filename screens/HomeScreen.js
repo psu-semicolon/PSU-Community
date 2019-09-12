@@ -1,157 +1,198 @@
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TouchableHighlight, Dimensions, Alert, TouchableOpacity} from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+import React from 'react';
+import {
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-import MapView, { Marker, Callout, ProviderPropType } from 'react-native-maps';
+import { MonoText } from '../components/StyledText';
 
-import { Button } from 'react-native-elements';
-
-import DialogInput from 'react-native-dialog-input';
-
-import ActionButton from 'react-native-action-button';
-
-import { Icon } from 'react-native-elements'
-
-import Constants from 'expo-constants';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
-
-
-
-export default class HomeScreen extends React.Component {
-
-  state = {
-    location: null,
-    errorMessage: null,
-  };
-
-  static navigationOptions = ({ navigation }) => ({
-    title: 'PSU-Community',
-    headerStyle: {
-      backgroundColor: '#3366CC',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  });
-
-  componentWillMount() {
-    if (Platform.OS === 'android' && !Constants.isDevice) {
-      this.setState({
-        errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
-      });
-    } else {
-      this._getLocationAsync();
-    }
-  }
-
-  _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      this.setState({
-        errorMessage: 'Permission to access location was denied',
-      });
-    }
-
-    let location = await Location.getCurrentPositionAsync({});
-    this.setState({ location });
-  };
-
-
-
-  render() {
-    const { width, height } = Dimensions.get('window');
-    const ASPECT_RATIO = width / height;
-    const LTT = this.props.navigation.getParam('param_latitude');
-    const LGT = this.props.navigation.getParam('param_longitude');
-
-    
-    return (
-      
-      <View style={styles.MainContainer}>
-
-        
- 
-        <MapView
-          style={styles.mapStyle}
-          showsUserLocation={false}
-          zoomEnabled={true}
-          zoomControlEnabled={true}
-          initialRegion={{
-            //latitude: 7.008945,
-            //longitude: 100.497930,
-            latitude: LTT,
-            longitude: LGT,
-            latitudeDelta: 0.001,
-            longitudeDelta: 0.001 * ASPECT_RATIO,
-          }}>
- 
-          <Marker
-            //coordinate={{ latitude: 7.008945, longitude: 100.497930 }}
-            coordinate={{ latitude: LTT, longitude: LGT }}
-            //title={"ศูนย์คอมพิวเตอร์"}
-            title={this.props.navigation.getParam('param_name')}
-            description={"มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"}
+export default function HomeScreen() {
+  return (
+    <View style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}>
+        <View style={styles.welcomeContainer}>
+          <Image
+            source={
+              __DEV__
+                ? require('../assets/images/robot-dev.png')
+                : require('../assets/images/robot-prod.png')
+            }
+            style={styles.welcomeImage}
           />
- 
-        </MapView>
- 
+        </View>
+
+        <View style={styles.getStartedContainer}>
+          <DevelopmentModeNotice />
+
+          <Text style={styles.getStartedText}>Get started by opening</Text>
+
+          <View
+            style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
+            <MonoText>screens/HomeScreen.js</MonoText>
+          </View>
+
+          <Text style={styles.getStartedText}>
+            Change this text and your app will automatically reload.
+          </Text>
+        </View>
+
+        <View style={styles.helpContainer}>
+          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
+            <Text style={styles.helpLinkText}>
+              Help, it didn’t automatically reload!
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+
+      <View style={styles.tabBarInfoContainer}>
+        <Text style={styles.tabBarInfoText}>
+          This is a tab bar. You can edit it in:
+        </Text>
+
+        <View
+          style={[styles.codeHighlightContainer, styles.navigationFilename]}>
+          <MonoText style={styles.codeHighlightText}>
+            navigation/MainTabNavigator.js
+          </MonoText>
+        </View>
       </View>
+    </View>
+  );
+}
+
+HomeScreen.navigationOptions = {
+  header: null,
+};
+
+function DevelopmentModeNotice() {
+  if (__DEV__) {
+    const learnMoreButton = (
+      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
+        Learn more
+      </Text>
+    );
+
+    return (
+      <Text style={styles.developmentModeText}>
+        Development mode is enabled: your app will be slower but you can use
+        useful development tools. {learnMoreButton}
+      </Text>
+    );
+  } else {
+    return (
+      <Text style={styles.developmentModeText}>
+        You are not in development mode: your app will run at full speed.
+      </Text>
     );
   }
 }
 
+function handleLearnMorePress() {
+  WebBrowser.openBrowserAsync(
+    'https://docs.expo.io/versions/latest/workflow/development-mode/'
+  );
+}
+
+function handleHelpPress() {
+  WebBrowser.openBrowserAsync(
+    'https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes'
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'flex-end',
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  developmentModeText: {
+    marginBottom: 20,
+    color: 'rgba(0,0,0,0.4)',
+    fontSize: 14,
+    lineHeight: 19,
+    textAlign: 'center',
+  },
+  contentContainer: {
+    paddingTop: 30,
+  },
+  welcomeContainer: {
     alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 20,
   },
-  map: {
-    ...StyleSheet.absoluteFillObject,
+  welcomeImage: {
+    width: 100,
+    height: 80,
+    resizeMode: 'contain',
+    marginTop: 3,
+    marginLeft: -10,
   },
-  bubble: {
-    backgroundColor: 'rgba(255,255,255,0.7)',
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-    borderRadius: 20,
-  },
-  latlng: {
-    width: 200,
-    alignItems: 'stretch',
-  },
-  button: {
-    width: 80,
-    paddingHorizontal: 12,
+  getStartedContainer: {
     alignItems: 'center',
-    marginHorizontal: 10,
+    marginHorizontal: 50,
   },
-  buttonContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginVertical: 20,
-    backgroundColor: 'transparent',
+  homeScreenFilename: {
+    marginVertical: 7,
   },
-  actionButtonIcon: {
-    fontSize: 20,
-    height: 22,
-    color: 'white',
+  codeHighlightText: {
+    color: 'rgba(96,100,109, 0.8)',
   },
-  MainContainer: {
+  codeHighlightContainer: {
+    backgroundColor: 'rgba(0,0,0,0.05)',
+    borderRadius: 3,
+    paddingHorizontal: 4,
+  },
+  getStartedText: {
+    fontSize: 17,
+    color: 'rgba(96,100,109, 1)',
+    lineHeight: 24,
+    textAlign: 'center',
+  },
+  tabBarInfoContainer: {
     position: 'absolute',
-    top: 0,
+    bottom: 0,
     left: 0,
     right: 0,
-    bottom: 0,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: -3 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 20,
+      },
+    }),
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    backgroundColor: '#fbfbfb',
+    paddingVertical: 20,
   },
-  mapStyle: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  }
+  tabBarInfoText: {
+    fontSize: 17,
+    color: 'rgba(96,100,109, 1)',
+    textAlign: 'center',
+  },
+  navigationFilename: {
+    marginTop: 5,
+  },
+  helpContainer: {
+    marginTop: 15,
+    alignItems: 'center',
+  },
+  helpLink: {
+    paddingVertical: 15,
+  },
+  helpLinkText: {
+    fontSize: 14,
+    color: '#2e78b7',
+  },
 });

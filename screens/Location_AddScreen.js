@@ -47,10 +47,16 @@ export default class Location_AddScreen extends React.Component {
     const { TextInputGrouptype }  = this.state ;
     const { TextInputLatitude }  = this.state ;
     const { TextInputLongitude }  = this.state ;
+
+    alert('TextInputName: ' + TextInputName);
+    alert('TextInputGrouptype: ' + TextInputGrouptype);
+    alert('TextInputLatitude: ' + TextInputLatitude);
+    alert('TextInputLongitude: ' + TextInputLongitude);
+
     
     
-   fetch("http://192.168.2.40/ServiceAPI/public/api/location",{ 
-   //fetch('http://172.22.108.157/ServiceAPI/public/api/location', {
+   //fetch("http://192.168.2.40/ServiceAPI/public/api/location",{ 
+   fetch('http://172.22.108.15/ServiceAPI/public/api/location', {
      method: 'post',
      headers: {
        'Accept': 'application/json',
@@ -125,6 +131,7 @@ export default class Location_AddScreen extends React.Component {
         <View style={styles.button}>
           <Button
             onPress={this.InsertDataToServer}
+            //onPress={() => {}}
             title="บันทึก"
 
           />

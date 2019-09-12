@@ -64,11 +64,11 @@ export default class SignInScreen extends React.Component {
 
             if(responseJson.status == 'Y')
             {
-              navigate('Home', {name: username})
+              navigate('List', {name: username})
             }
             else{
               //navigate('Home', {name: 'User'})
-              Alert.alert('Sign In', `ผู้ใช้งานและ/หรือรหัสผ่านไม่ถูกต้อง`);
+              Alert.alert('Sign In', `ผู้ใช้งานไม่ถูกต้อง/รหัสผ่านไม่ถูกต้อง`);
             }
             
           })
@@ -123,11 +123,7 @@ export default class SignInScreen extends React.Component {
           onPress={this.onSingIn.bind(this)}            
         />        
                 
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>Sign in with Facebook.</Text>
-          </TouchableOpacity>
-        </View>
+        
       </View>
     );
   }
@@ -150,6 +146,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     fontWeight: '900',
+    marginBottom: 20,
   },
   input: {
     width: 300,
@@ -181,3 +178,9 @@ const styles = StyleSheet.create({
     color: '#2e78b7',
   },
 });
+
+/*<View style={styles.helpContainer}>
+          <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
+            <Text style={styles.helpLinkText}>Sign in with Facebook.</Text>
+          </TouchableOpacity>
+        </View>*/

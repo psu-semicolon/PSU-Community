@@ -18,6 +18,7 @@ import FetchExample from '../screens/FetchExample';
 import FetchExample2 from '../screens/FetchExample2';
 import EntryScreen from '../screens/EntryScreen';
 import AxiosExample from '../screens/AxiosExample';
+import Location_DirectionScreen from '../screens/Location_DirectionScreen';
 import Location_MapScreen from '../screens/Location_MapScreen';
 import Location_ViewScreen from '../screens/Location_ViewScreen';
 import Location_EditScreen from '../screens/Location_EditScreen';
@@ -77,9 +78,28 @@ MapStack.navigationOptions = {
   ),
 };
 
+const DirectionStack = createStackNavigator({
+  Direction: Location_DirectionScreen,
+});
+
+DirectionStack.navigationOptions = {
+  tabBarLabel: 'Direction',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
 const ListStack = createStackNavigator({
   List: Location_ListScreen,
   Home: HomeScreen,
+  Direction: Location_DirectionScreen,
   View: Location_ViewScreen,
   Edit: Location_EditScreen,
   Add: Location_AddScreen,

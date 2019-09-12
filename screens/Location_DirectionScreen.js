@@ -1,33 +1,20 @@
 import React, { Component } from 'react';
-import { Image, Platform, Text, View, StyleSheet, Dimensions } from 'react-native';
+import { Platform, Text, View, StyleSheet, Dimensions } from 'react-native';
 
 import MapView, { Marker, Callout, ProviderPropType } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
-
-import { Icon } from 'react-native-elements'
 
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 
-export default class Location_MapSceen extends Component {
+export default class Location_DirectionScreen extends Component {
 
   static navigationOptions = ({ navigation }) => ({
-    title: 'แผนที่',
-    headerLeft: 
-    <View style={styles.icon}>
-    <Icon
-        name='menu'      
-        color='#FFFFFF'
-        onPress = {()=> {
-          navigation.openDrawer();
-        }
-      }
-    />
-    </View>
-   ,
+    title: 'นำทาง',
     headerStyle: {
       backgroundColor: '#3366CC',
+      
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
@@ -79,6 +66,8 @@ export default class Location_MapSceen extends Component {
 
     const { width, height } = Dimensions.get('window');
     const ASPECT_RATIO = width / height;
+    const LTT = this.props.navigation.getParam('param_latitude');
+    const LGT = this.props.navigation.getParam('param_longitude');
 
     return (
       <View style={styles.MainContainer}>
@@ -89,25 +78,26 @@ export default class Location_MapSceen extends Component {
           zoomEnabled={true}
           zoomControlEnabled={true} 
           initialRegion={{
+            latitude: LTT, 
+            longitude: LGT,
             //latitude: 7.00891383730039,   // "ศูนย์คอมพิวเตอร์"
-            //longitude: 100.4983782894092, // "มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"
-            latitude: Number(this.state.latitude), 
-            longitude: Number(this.state.longitude),
+            //longitude: 100.4983782894092, // "มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"            
             latitudeDelta: 0.01,
             longitudeDelta: 0.01 * ASPECT_RATIO,
           }}>
           
           <Marker
             coordinate={{
-              //latitude: 7.00891383730039,   // "ศูนย์คอมพิวเตอร์"
-              //longitude: 100.4983782894092, // "มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"
               latitude: Number(this.state.latitude), 
               longitude: Number(this.state.longitude),
+              //latitude: 7.00891383730039,   // "ศูนย์คอมพิวเตอร์"
+              //longitude: 100.4983782894092, // "มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"     
+              //latitude: 7.00318,   // "7-Eleven 8 คณะแพทย์ ม.อ."
+              //longitude: 100.494961, //          
             }}
             title={"My location"}
             description={"ที่อยู่ปัจจุบันของฉัน"}
             image={require('../assets/images/placeholder.png')}
-            description={"ที่อยู่ปัจจุบันของฉัน"}
           />
           <Marker
             coordinate={{
@@ -115,20 +105,20 @@ export default class Location_MapSceen extends Component {
               //longitude: Number(this.state.longitude),
               //latitude: 7.00891383730039,   // "ศูนย์คอมพิวเตอร์"
               //longitude: 100.4983782894092, // "มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"
-              latitude: 7.00318,   // "7-Eleven 8 คณะแพทย์ ม.อ."
-              longitude: 100.494961, // 
+              latitude: LTT,   // "7-Eleven 8 คณะแพทย์ ม.อ."
+              longitude: LGT, // 
               
             }}
-            title={"7-Eleven 8 คณะแพทย์ ม.อ."}
-            description={"รายละเอียด 7-Eleven 8 คณะแพทย์ ม.อ."}
+            title={this.props.navigation.getParam('param_name')}
+            description={"มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"}
           />
 
           <MapViewDirections 
             origin={{ 
-              //latitude: Number(this.state.latitude), 
-              //longitude: Number(this.state.longitude)
-              latitude: 7.00891383730039,   // "ศูนย์คอมพิวเตอร์"
-              longitude: 100.4983782894092, // "มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"
+              latitude: Number(this.state.latitude), 
+              longitude: Number(this.state.longitude),
+              //latitude: 7.00891383730039,   // "ศูนย์คอมพิวเตอร์"
+              //longitude: 100.4983782894092, // "มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"
               //latitude: 7.00318,   // "7-Eleven 8 คณะแพทย์ ม.อ."
               //longitude: 100.494961, // 
               }} 
@@ -137,16 +127,15 @@ export default class Location_MapSceen extends Component {
               //longitude: Number(this.state.longitude)
               //latitude: 7.00891383730039,   // "ศูนย์คอมพิวเตอร์"
               //longitude: 100.4983782894092, // "มหาวิทยาลัยสงขลานครินทร์ วิทยาเขตหาดใหญ่"
-              latitude: 7.00318,   // "7-Eleven 8 คณะแพทย์ ม.อ."
-              longitude: 100.494961, // 
+              latitude: LTT,   // "7-Eleven 8 คณะแพทย์ ม.อ."
+              longitude: LGT, // 
               }}
-              apikey={"Google_Directions_API_Key"} 
+              apikey={"AIzaSyAgIPgpUq8oRjr5bv5Mz8LHoE0PKQeUTUI"} 
               strokeWidth={3}
               strokeColor="hotpink"
           />
-      
+                    
         </MapView>
-        
  
       </View>
     );
@@ -197,9 +186,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'flex-end',
-  },
-  icon: {
-    marginLeft: 10,
   },
   mapStyle: {
     position: 'absolute',
